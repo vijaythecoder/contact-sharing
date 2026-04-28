@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>QR Code - Vijay Tupakula</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    height: 100vh; height: 100dvh; width: 100vw;
+    overflow: hidden;
+    background: #050508;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* Ambient gradient orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none;
+  }
+  .orb-1 {
+    width: 300px; height: 300px;
+    top: -60px; left: -80px;
+    background: rgba(99,102,241,0.12);
+  }
+  .orb-2 {
+    width: 250px; height: 250px;
+    bottom: 80px; right: -60px;
+    background: rgba(168,85,247,0.10);
+  }
+  .orb-3 {
+    width: 200px; height: 200px;
+    bottom: -40px; left: 30%;
+    background: rgba(59,130,246,0.08);
+  }
+
+  /* Subtle grid texture */
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 0 32px;
+    gap: 36px;
+  }
+
+  /* Top text */
+  .top-text {
+    text-align: center;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 10px;
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(139,92,246,0.7);
+  }
+  .headline {
+    font-size: 32px; font-weight: 700;
+    color: #fff; letter-spacing: -0.04em;
+    line-height: 1.15;
+  }
+  .headline em {
+    font-style: normal;
+    background: linear-gradient(135deg, #a78bfa, #818cf8, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* QR Code */
+  .qr-frame {
+    position: relative;
+    padding: 3px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(168,85,247,0.4), rgba(59,130,246,0.4));
+  }
+  .qr-frame::before {
+    content: '';
+    position: absolute; inset: -1px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2));
+    filter: blur(20px);
+    z-index: -1;
+  }
+  .qr-inner {
+    background: #fff;
+    border-radius: 21px;
+    padding: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Bottom text */
+  .bottom-text {
+    text-align: center;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 14px;
+  }
+  .tagline {
+    font-size: 15px; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+    max-width: 260px;
+  }
+  .name-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 20px; border-radius: 100px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .name-tag .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    flex-shrink: 0;
+  }
+  .name-tag .name {
+    font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: -0.01em;
+  }
+  .name-tag .sep {
+    color: rgba(255,255,255,0.15);
+    font-weight: 300;
+  }
+  .name-tag .company {
+    font-size: 13px; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* Scan hint at very bottom */
+  .scan-hint {
+    position: absolute;
+    bottom: max(40px, env(safe-area-inset-bottom, 40px));
+    left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 500;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.06em;
+    z-index: 1;
+  }
+  .scan-hint .cam {
+    font-size: 13px; opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grid-bg"></div>
+
+<div class="content">
+  <div class="top-text">
+    <span class="eyebrow">The future of dental AI</span>
+    <h1 class="headline">Scan. <em>Connect.</em><br>Skip the small talk.</h1>
+  </div>
+
+  <div class="qr-frame">
+    <div class="qr-inner" id="qr"></div>
+  </div>
+
+  <div class="bottom-text">
+    <p class="tagline">One scan away from the conversation that could change everything.</p>
+    <div class="name-tag">
+      <span class="dot"></span>
+      <span class="name">Vijay Tupakula</span>
+      <span class="sep">|</span>
+      <span class="company">Savvy Agents</span>
+    </div>
+  </div>
+</div>
+
+<div class="scan-hint">
+  <span class="cam">&#9711;</span>
+  <span>Point camera here</span>
+</div>
+
+<script>
+  var qr = qrcode(0, 'M');
+  qr.addData('https://contact.vijaytupakula.com');
+  qr.make();
+  document.getElementById('qr').innerHTML = qr.createSvgTag({ cellSize: 5, margin: 0, scalable: true });
+  var svg = document.querySelector('#qr svg');
+  if (svg) { svg.style.width = '200px'; svg.style.height = '200px'; svg.style.display = 'block'; }
+</script>
+</body>
+</html>
